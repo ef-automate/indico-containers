@@ -1,0 +1,7 @@
+services:
+  # The main Indico container which runs flask
+  # The same image is also used to run celery
+  indico-web:
+    command: /dbupgrade.sh
+    volumes:
+      - './worker/dbupgrade.sh:/dbupgrade.sh:ro'

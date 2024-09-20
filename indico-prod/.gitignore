@@ -1,0 +1,5 @@
+
+nginx.conf.indico*
+.env
+.env*
+indico*.conf

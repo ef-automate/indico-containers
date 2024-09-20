@@ -1,0 +1,44 @@
+services:
+  # The main Indico container which runs flask
+  # The same image is also used to run celery
+  indico-web: &indico-web
+    restart: unless-stopped
+    build:
+      context: worker
+      args:
+        - INDICO_VERSION=${INDICO_VERSION}
+      dockerfile: Dockerfile.ldap
+    volumes:
+      - '/opt/indico/archive:/opt/indico/archive' # file storage
+
+  # Indico celery
+  indico-celery: &indico-celery
+    restart: unless-stopped
+
+  # Indico celery beat
+  indico-celery-beat:
+    restart: unless-stopped
+
+  # Redis
+  indico-redis:
+    restart: unless-stopped
+
+  # Postgres
+  indico-postgres:
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - /opt/indico/db_backup:/dbdumps:ro'
+
+  # Nginx proxy
+  # Indico can be accessed by default via localhost:8080
+  indico-nginx:
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - './nginx.conf.${NGINX_SERVER_NAME}:/etc/nginx/conf.d/default.conf:ro'
+      - '/etc/ssl/certs/wildcard.euro-fusion.org.chained.crt:/wildcard.euro-fusion.org.chained.crt:ro'
+      - '/etc/ssl/private/wildcard.euro-fusion.org.key:/wildcard.euro-fusion.org.key:ro'

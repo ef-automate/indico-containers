@@ -1,0 +1,20 @@
+ARG INDICO_VERSION
+FROM getindico/indico:${INDICO_VERSION}
+
+ENV INDICO_VIRTUALENV="/opt/indico/.venv"
+ARG pip="${INDICO_VIRTUALENV}/bin/pip"
+
+# create indico user, install apt dependencies as root and setup uwsgi etc.
+USER root
+
+RUN set -ex && \
+    apt-get update && \
+    apt-get -y install libsasl2-dev && \
+    apt-get clean
+
+# all the installations etc can be done using the unprivileged indico user
+USER indico
+
+RUN set -ex && \
+    python -m venv ${INDICO_VIRTUALENV} && \
+    ${pip} install python-ldap 
