@@ -13,10 +13,12 @@ services:
 
   # Indico celery
   indico-celery: &indico-celery
+    <<: *indico-web
     restart: unless-stopped
 
   # Indico celery beat
   indico-celery-beat:
+    <<: *indico-celery
     restart: unless-stopped
 
   # Redis
