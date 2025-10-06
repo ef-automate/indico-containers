@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # /opt/indico/set_user.sh
-# . /opt/indico/.venv/bin/activate
+. /opt/indico/.venv/bin/activate
 
 connect_to_db() {
     psql -lqt | cut -d \| -f 1 | grep -qw $PGDATABASE

@@ -10,6 +10,7 @@ services:
       dockerfile: Dockerfile.ldap
     volumes:
       - '/opt/indico/archive:/opt/indico/archive' # file storage
+      - '/opt/indico/indico-containers/indico-prod/worker/dbupgrade.sh:/opt/indico/dbupgrade.sh:ro'
 
   # Indico celery
   indico-celery: &indico-celery
