@@ -2,7 +2,6 @@ ARG INDICO_VERSION
 FROM getindico/indico:${INDICO_VERSION}
 
 ENV INDICO_VIRTUALENV="/opt/indico/.venv"
-ARG pip="${INDICO_VIRTUALENV}/bin/pip"
 
 # create indico user, install apt dependencies as root and setup uwsgi etc.
 USER root
@@ -17,4 +16,4 @@ USER indico
 
 RUN set -ex && \
     python -m venv ${INDICO_VIRTUALENV} && \
-    ${pip} install python-ldap 
+    uv pip install python-ldap
