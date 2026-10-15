@@ -118,47 +118,47 @@ jobs:
       #     name: indico-image
 
 
-  publish-dockerhub:
-    name: Publish to Docker Hub 🚢
-    needs: build
-    runs-on: ubuntu-22.04
-    environment: publish-dockerhub
-    steps:
-      # - name: Download build artifact 🔽
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: indico-image
-      #     path: /tmp/
+  # publish-dockerhub:
+  #   name: Publish to Docker Hub 🚢
+  #   needs: build
+  #   runs-on: ubuntu-22.04
+  #   environment: publish-dockerhub
+  #   steps:
+  #     # - name: Download build artifact 🔽
+  #     #   uses: actions/download-artifact@v3
+  #     #   with:
+  #     #     name: indico-image
+  #     #     path: /tmp/
 
-      # XXX Using the cache as a hack to workaround extremely slow artifact uploads (5 minutes+ for less than 1GB)
-      - name: Get unique run id
-        id: unique_id
-        run: |
-          echo "cache_key=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> $GITHUB_OUTPUT
+  #     # XXX Using the cache as a hack to workaround extremely slow artifact uploads (5 minutes+ for less than 1GB)
+  #     - name: Get unique run id
+  #       id: unique_id
+  #       run: |
+  #         echo "cache_key=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> $GITHUB_OUTPUT
 
-      - name: Download build artifact 🔽
-        uses: actions/cache@v6
-        with:
-          key: indico-image-${{ steps.unique_id.outputs.cache_key }}
-          path: /tmp/indico-image.tar
+  #     - name: Download build artifact 🔽
+  #       uses: actions/cache@v6
+  #       with:
+  #         key: indico-image-${{ steps.unique_id.outputs.cache_key }}
+  #         path: /tmp/indico-image.tar
 
-      - name: Import image
-        run: |
-          docker load --input /tmp/indico-image.tar
-          docker image ls -a | grep indico
+  #     - name: Import image
+  #       run: |
+  #         docker load --input /tmp/indico-image.tar
+  #         docker image ls -a | grep indico
 
-      - name: Log in to Docker Hub 🔑
-        uses: docker/login-action@v4.6.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+  #     - name: Log in to Docker Hub 🔑
+  #       uses: docker/login-action@v4.6.0
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Push Docker image 🚢
-        run: |
-          docker push --all-tags getindico/indico
+  #     - name: Push Docker image 🚢
+  #       run: |
+  #         docker push --all-tags getindico/indico
 
-      # - name: Delete build artifact 🗑
-      #   if: success() || failure()
-      #   uses: geekyeggo/delete-artifact@v2
-      #   with:
-      #     name: indico-image
+  #     # - name: Delete build artifact 🗑
+  #     #   if: success() || failure()
+  #     #   uses: geekyeggo/delete-artifact@v2
+  #     #   with:
+  #     #     name: indico-image
