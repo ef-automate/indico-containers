@@ -3,6 +3,12 @@ name: Docker build & release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag_version:
+        description: Tag version to build (without the leading v)
+        required: true
+        type: string
 
 jobs:
   build:
@@ -15,8 +21,15 @@ jobs:
       - name: Get version
         id: version
         run: |
-          echo indico_version="${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-          echo indico_version="${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            version="$INPUT_TAG_VERSION"
+          else
+            version="${GITHUB_REF#refs/tags/v}"
+          fi
+          echo "indico_version=$version" >> $GITHUB_ENV
+          echo "indico_version=$version" >> $GITHUB_OUTPUT
+        env:
+          INPUT_TAG_VERSION: ${{ inputs.tag_version }}
 
       - name: Set owner
         id: owner
