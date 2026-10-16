@@ -4,7 +4,6 @@ services:
   indico-web: &indico-web
     image: ghcr.io/ef-automate/ef-indico:${INDICO_VERSION:-latest}
     restart: unless-stopped
-    stop_grace_period: 2m
     build:
       context: worker
       args:
@@ -18,14 +17,14 @@ services:
   # Indico celery
   indico-celery: &indico-celery
     <<: *indico-web
+    image: ghcr.io/ef-automate/ef-indico:${INDICO_VERSION:-latest}
     restart: unless-stopped
-    stop_grace_period: 10s
 
   # Indico celery beat
   indico-celery-beat:
     <<: *indico-celery
     restart: unless-stopped
-    stop_grace_period: 10s
+    image: ghcr.io/ef-automate/ef-indico:${INDICO_VERSION:-latest}
 
   # Redis
   indico-redis:
