@@ -44,6 +44,17 @@ The production setup contains the following containers:
 
 _indico-web_ uses the `getindico/indico` image that we publish to Dockerhub. You can build this image locally using the [build_latest.sh](build_latest.sh) script. The image pulls the latest Indico release from PyPI together with the `indico-plugins` package. You can use the `indico.conf` file to specify which plugins you want to enable.
 
+### Podman and shutdown
+
+When LaTeX builds use Podman inside the Indico containers, `indico-web` is
+allowed up to 2 minutes to stop cleanly. The Celery services retain the default
+10-second stop grace period.
+
+At startup, the container entrypoint removes Podman's temporary runtime state
+under `/tmp/storage-run-*` (`containers` and `libpod/tmp`). This handles stale
+state left by an unclean host reboot; persistent Podman image and container
+storage is not removed.
+
 ### Different setups
 
 If you don't need the DB and the nginx proxy, you can just run:
