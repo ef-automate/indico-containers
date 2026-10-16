@@ -2,12 +2,14 @@ services:
   # The main Indico container which runs flask
   # The same image is also used to run celery
   indico-web: &indico-web
+    image: ghcr.io/ef-automate/ef-indico:${INDICO_VERSION:-latest}
     restart: unless-stopped
     stop_grace_period: 2m
     build:
       context: worker
       args:
-        - INDICO_VERSION=${INDICO_VERSION}
+        - INDICO_VERSION=${INDICO_VERSION:-latest}
+        - tag=${INDICO_VERSION:-latest}
       dockerfile: Dockerfile.ldap
     volumes:
       - '/opt/indico/archive:/opt/indico/archive' # file storage

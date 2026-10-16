@@ -1,4 +1,4 @@
-ARG INDICO_VERSION
+ARG INDICO_VERSION=latest
 FROM getindico/indico:${INDICO_VERSION}
 
 ENV INDICO_VIRTUALENV="/opt/indico/.venv"
