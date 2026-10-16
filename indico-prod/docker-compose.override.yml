@@ -3,6 +3,7 @@ services:
   # The same image is also used to run celery
   indico-web: &indico-web
     restart: unless-stopped
+    stop_grace_period: 2m
     build:
       context: worker
       args:
@@ -16,11 +17,13 @@ services:
   indico-celery: &indico-celery
     <<: *indico-web
     restart: unless-stopped
+    stop_grace_period: 10s
 
   # Indico celery beat
   indico-celery-beat:
     <<: *indico-celery
     restart: unless-stopped
+    stop_grace_period: 10s
 
   # Redis
   indico-redis:

@@ -5,7 +5,6 @@ services:
     build: worker
     # privileged is ONLY needed if you want to use LaTeX builds
     privileged: true
-    stop_grace_period: 2m
     command: /opt/indico/run_indico.sh
     depends_on:
       - indico-redis
@@ -40,7 +39,6 @@ services:
   # Indico celery
   indico-celery: &indico-celery
     <<: *indico-web
-    stop_grace_period: 10s
     command: /opt/indico/run_celery.sh
     depends_on:
       - indico-redis
@@ -50,7 +48,6 @@ services:
   # Indico celery beat
   indico-celery-beat:
     <<: *indico-celery
-    stop_grace_period: 10s
     command: /opt/indico/run_celery.sh beat
   # Redis
   indico-redis:
