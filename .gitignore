@@ -3,3 +3,4 @@ indico-prod/data/*
 
 # IDE files
 .idea/
+indico-prod/.env
