@@ -41,6 +41,7 @@ services:
   # Nginx proxy
   # Indico can be accessed by default via localhost:8080
   indico-nginx:
+    image: ghcr.io/nginx/nginx-unprivileged:stable-alpine
     restart: unless-stopped
     ports:
       - "443:443"
